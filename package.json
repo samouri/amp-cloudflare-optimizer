@@ -1,0 +1,15 @@
+{
+  "name": "amp-cloudflare-optimizer",
+  "version": "0.1.0",
+  "description": "An Cloudflare Worker AMP Optimizer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.{js,css,json,md}'"
+  },
+  "author": "Jake Fried <samouri@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
+}
