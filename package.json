@@ -11,5 +11,11 @@
   "license": "MIT",
   "devDependencies": {
     "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "@ampproject/toolbox-optimizer": "^2.7.4",
+    "acorn": "^8.0.4",
+    "jimp": "^0.16.1",
+    "probe-image-size": "^6.0.0"
   }
 }
