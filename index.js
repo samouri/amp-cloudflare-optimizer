@@ -1,6 +1,6 @@
 const config = require('./optimizer-config')
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
-const ampOptimizer = AmpOptimizer.create({ verbose: false })
+const ampOptimizer = AmpOptimizer.create({ verbose: false, minify: false })
 
 async function handleRequest(request) {
   const url = new URL(request.url)
