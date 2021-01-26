@@ -14,6 +14,7 @@ wrangler generate my-worker  https://github.com/samouri/amp-cloudflare-optimizer
 
 ```js
 module.export = {
+  from: 'YOUR_WORKER_DOMAIN', // Provide the domain name that your cloudflare worker will be deployed to.
   to: 'YOUR_SERVER_IP', // Provide IP Address or Domain Name where requests should be proxied to.
 }
 ```

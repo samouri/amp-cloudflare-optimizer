@@ -2,6 +2,19 @@ const config = require('./optimizer-config')
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
 const ampOptimizer = AmpOptimizer.create({ verbose: false, minify: false })
 
+/**
+ * HrefRewriter for rewriting all links to point back to the reverse-proxy instead of the underlying
+ * domain.
+ */
+
+class HrefRewriter {
+  element(element) {
+    const href = element.getAttribute('href')
+    element.setAttribute('href', href.replace(config.to, config.from))
+  }
+}
+const linkRewriter = new HTMLRewriter().on('a', new HrefRewriter())
+
 async function handleRequest(request) {
   const url = new URL(request.url)
   if (!config.from || url.hostname === config.from) {
@@ -27,7 +40,8 @@ async function handleRequest(request) {
   console.log(`Optimizing: ${url.toString()}`)
   try {
     const transformed = await ampOptimizer.transformHtml(responseText)
-    return new Response(transformed, { headers, statusText, status })
+    const r = new Response(transformed, { headers, statusText, status })
+    return linkRewriter.transform(r)
   } catch (err) {
     console.error(`Failed to optimize: ${url.toString()}, with Error; ${err}`)
     return clonedResponse
