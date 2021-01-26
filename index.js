@@ -26,6 +26,9 @@ async function handleRequest(request) {
   const { headers, status, statusText } = response
   const responseText =
     headers.get('content-type').includes('text/html') && (await response.text())
+
+  // Turns out that content-type lies ~25% of the time.
+  // See: https://blog.cloudflare.com/html-parsing-1/
   const isHtml = responseText && responseText.startsWith('<')
 
   // If not HTML then return original response unchanged.
