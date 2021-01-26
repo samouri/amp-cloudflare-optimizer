@@ -1,22 +1,37 @@
+const config = require('./optimizer-config')
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
-const ampOptimizer = AmpOptimizer.create({verbose: false})
+const ampOptimizer = AmpOptimizer.create({ verbose: false })
 
-const HTML_URL =
-  'https://raw.githubusercontent.com/samouri/amp-cloudflare-optimizer/main/docs/index.html'
 async function handleRequest(request) {
-  // TODO: how can this be diff per request.
-  const htmlPromise = fetch(HTML_URL).then(r => r.text())
-  const optimizedHtml = htmlPromise.then(html =>
-    ampOptimizer.transformHtml(html),
-  )
+  const url = new URL(request.url)
+  if (!config.from || url.hostname === config.from) {
+    url.hostname = config.to
+  }
 
-  return optimizedHtml.then(html => {
-    return new Response(html, {
-      headers: {
-        'content-type': 'text/html;charset=UTF-8',
-      },
-    })
-  })
+  const response = await fetch(url.toString())
+  const clonedResponse = response.clone()
+  const { headers, status, statusText } = response
+  const responseText =
+    headers.get('content-type').includes('text/html') && (await response.text())
+  const isHtml = responseText && responseText.startsWith('<')
+
+  // If not HTML then return original response unchanged.
+  if (!isHtml) {
+    const contentType = headers.get('content-type')
+    console.log(
+      `Proxying unoptimized: ${url.toString()}, content-type: ${contentType}`,
+    )
+    return clonedResponse
+  }
+
+  console.log(`Optimizing: ${url.toString()}`)
+  try {
+    const transformed = await ampOptimizer.transformHtml(responseText)
+    return new Response(transformed, { headers, statusText, status })
+  } catch (err) {
+    console.error(`Failed to optimize: ${url.toString()}, with Error; ${err}`)
+    return clonedResponse
+  }
 }
 
 addEventListener('fetch', event => {
