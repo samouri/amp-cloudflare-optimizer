@@ -21,7 +21,9 @@ async function handleRequest(request) {
     url.hostname = config.to
   }
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cf: { cacheTtl: 3600, cacheEverything: true },
+  })
   const clonedResponse = response.clone()
   const { headers, status, statusText } = response
   const responseText =
