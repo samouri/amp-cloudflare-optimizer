@@ -1,12 +1,8 @@
-name = "amp-optimizer-dev"
+name = "amp-optimizer"
 type = "webpack"
 account_id = "3f6b87bddd5668df992c19d53e030d32"
 workers_dev = true
 route = ""
 zone_id = ""
 webpack_config = "webpack.config.js"
-vars = { ENVIRONMENT = "dev" }
-
-[env.production]
-name = "amp-optimizer"
 vars = { ENVIRONMENT = "production" }
