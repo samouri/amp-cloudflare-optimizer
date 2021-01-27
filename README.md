@@ -1,5 +1,8 @@
 # AMP Cloudflare Optimizer
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/samouri/amp-cloudflare-optimizer)
+
+
 See it in action at https://amp-optimizer.friedj-google.workers.dev'
 
 ## Usage
