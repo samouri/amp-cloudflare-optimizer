@@ -5,3 +5,8 @@ workers_dev = true
 route = ""
 zone_id = ""
 webpack_config = "webpack.config.js"
+vars = { ENVIRONMENT = "dev" }
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
