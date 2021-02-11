@@ -77,5 +77,6 @@ async function handleRequest(request) {
 }
 
 addEventListener('fetch', event => {
+  event.passThroughOnException()
   return event.respondWith(handleRequest(event.request))
 })
