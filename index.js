@@ -1,6 +1,22 @@
 const config = require('./optimizer-config')
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
 
+// Ensure config is valid
+if (config.from || config.to) {
+  if (!config.from || !config.to) {
+    throw new Error(
+      `If using Cloudflare Worker as your primary domain, you must provide both a "from" and "to" address in optimizer-config.js`,
+    )
+  }
+}
+if (config.domain) {
+  if (config.from || config.to) {
+    throw new Error(
+      `If using Cloudflare Worker as a route interceptor, "from" and "to" are unnecessary. Please delete them from optimizer-config.js`,
+    )
+  }
+}
+
 /**
  * 1. minify:false is necessary to speed up the AmpOptimizer. terser also cannot be used since dynamic eval() is part of terser and banned by CloudflareWorkers.
  *    see the webpack.config.js for how we disable the terser module.
@@ -37,7 +53,7 @@ const linkRewriter = new HTMLRewriter().on('a', new HrefRewriter())
 
 async function handleRequest(request) {
   const url = new URL(request.url)
-  if (!config.from || url.hostname === config.from) {
+  if (config.to && (!config.from || url.hostname === config.from)) {
     url.hostname = config.to
   }
 
