@@ -4,15 +4,18 @@ const AmpOptimizer = require('@ampproject/toolbox-optimizer')
 /**
  * 1. minify:false is necessary to speed up the AmpOptimizer. terser also cannot be used since dynamic eval() is part of terser and banned by CloudflareWorkers.
  *    see the webpack.config.js for how we disable the terser module.
- * 2. fetch is modified to immediately throw. This is because we want the AmpOptimizer to act as quickly as possible. Startup cost is not amortized since it is initiated on each request.
+ * 2. fetch is set to Cloudflare Worker provided fetch, with high caching to amortize startup time for each AmpOptimizer instance.
  */
 const ampOptimizer = AmpOptimizer.create({
   minify: false,
-  fetch: (url, init) => fetch(url, {...init, cf: {
-      cacheEverything: true,
-      cacheTtl: 60 * 60 * 6,
-
-  }}),
+  fetch: (url, init) =>
+    fetch(url, {
+      ...init,
+      cf: {
+        cacheEverything: true,
+        cacheTtl: 60 * 60 * 6,
+      },
+    }),
 })
 
 /**
