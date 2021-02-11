@@ -8,9 +8,11 @@ const AmpOptimizer = require('@ampproject/toolbox-optimizer')
  */
 const ampOptimizer = AmpOptimizer.create({
   minify: false,
-  fetch: () => {
-    throw new Error('should not make requests.')
-  },
+  fetch: (url, init) => fetch(url, {...init, cf: {
+      cacheEverything: true,
+      cacheTtl: 60 * 60 * 6,
+
+  }}),
 })
 
 /**

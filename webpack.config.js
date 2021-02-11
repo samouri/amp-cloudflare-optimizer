@@ -5,7 +5,7 @@ module.exports = {
   entry: path.resolve(__dirname, 'index.js'),
   resolve: {
     alias: {
-      fs: path.resolve(__dirname, 'null.js'),
+      fs: path.resolve(__dirname, 'fs.js'),
       terser: path.resolve(__dirname, 'terser.js'),
     },
   },
