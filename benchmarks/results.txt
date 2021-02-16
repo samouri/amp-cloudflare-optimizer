@@ -1,0 +1,12 @@
+Test: basic.html (minified)
+   Mean=0.67
+   StdDev=3.977574637891796
+Test: basic.html (unminifed)
+   Mean=1.37
+   StdDev=11.026926135600952
+Test: amp.dev.html (minified)
+   Mean=126.37
+   StdDev=23.079278584912483
+Test: amp.dev.html (unminifed)
+   Mean=18.41
+   StdDev=7.398776925952019

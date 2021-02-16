@@ -10,6 +10,7 @@
   "author": "Jake Fried <samouri@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
+    "node-fetch": "^2.6.1",
     "prettier": "^1.18.2"
   },
   "dependencies": {
