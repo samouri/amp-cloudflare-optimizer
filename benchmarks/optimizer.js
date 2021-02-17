@@ -1,7 +1,24 @@
 const fs = require('fs')
-const path = require('path') 
-const nodeFetch = require('node-fetch')
+const path = require('path')
+const { spawnSync } = require('child_process')
+
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
+const nodeFetch = require('node-fetch')
+
+function exec(cmd, args = []) {
+  const spawnedProcess = spawnSync(cmd, args, {
+    cwd: __dirname,
+    env: process.env,
+    encoding: 'utf-8',
+    stdio: 'pipe',
+  })
+  if (spawnedProcess.status !== 0) {
+    throw new Error(
+      `Exec status code: ${spawnedProcess.status}. stderr: "${spawnedProcess.stderr}".`,
+    )
+  }
+  return spawnedProcess.stdout
+}
 
 const average = array => array.reduce((a, b) => a + b) / array.length
 const deviation = array => {
@@ -26,36 +43,58 @@ const basicHtml = fs.readFileSync(basicHtmlFilePath, 'utf8')
 const ampDevHtmlFilePath = path.join(__dirname, 'examples', 'amp.dev.html')
 const ampDevHtml = fs.readFileSync(ampDevHtmlFilePath, 'utf8')
 
-let runs = 100;
-let output = "";
-async function runTest(name, html) {
-  let unminifiedResults = []
+let runs = 100
+let output = ''
+async function runTest(name, fn) {
+  let results = []
   for (let i = 0; i < runs; i++) {
     const startTime = Date.now()
-    await unminifiedOptimizer.transformHtml(html, { canonical: 'google.com' })
-    unminifiedResults.push(Date.now() - startTime);
+    await fn()
+    results.push(Date.now() - startTime)
   }
-
-  let minifiedResults = []
-  for (let i = 0; i < runs; i++) {
-    const startTime = Date.now()
-    await minifiedOptimizer.transformHtml(html, { canonical: 'google.com' })
-    minifiedResults.push(Date.now() - startTime);
-  }
-  output += `Test: ${name} (minified)\n`;
-  output += `   Mean=${average(minifiedResults)}\n`
-  output += `   StdDev=${deviation(minifiedResults)}\n` 
-
-  output += `Test: ${name} (unminifed)\n`;
-  output += `   Mean=${average(unminifiedResults)}\n`
-  output += `   StdDev=${deviation(unminifiedResults)}\n` 
+  output += `Test: ${name}\n`
+  output += `   Mean=${average(results)}\n`
+  output += `   StdDev=${deviation(results)}\n`
 }
 
-async function main() { 
-  await runTest("basic.html", basicHtml);
-  await runTest("amp.dev.html", ampDevHtml); 
-  console.log(output);
+async function main() {
+  await runTest('basic.html (unminified)', () =>
+    unminifiedOptimizer.transformHtml(basicHtml, {
+      canonical: 'google.com',
+    }),
+  )
+
+  await runTest('amp.dev.html (unminified)', () =>
+    unminifiedOptimizer.transformHtml(ampDevHtml, {
+      canonical: 'google.com',
+    }),
+  )
+
+  await runTest('basic.html (minified)', () =>
+    minifiedOptimizer.transformHtml(basicHtml, {
+      canonical: 'google.com',
+    }),
+  )
+
+  await runTest('amp.dev.html (minified)', () =>
+    minifiedOptimizer.transformHtml(ampDevHtml, { canonical: 'google.com' }),
+  )
+
+  await runTest('GO: amp.dev.html', () =>
+    exec('/Users/friedj/go/bin/transform', [
+      '/Users/friedj/Repos/cloudflare-worker/benchmarks/examples/amp.dev.html',
+    ]),
+  )
+
+  await runTest('GO: basic.html', () =>
+    exec('/Users/friedj/go/bin/transform', [
+      '/Users/friedj/Repos/cloudflare-worker/benchmarks/examples/basic.html',
+    ]),
+  )
+
+  await runTest('exec: echo', () => exec('echo', ['Hello, World']))
+
+  console.log(output)
 }
 
-main();
-
+main()

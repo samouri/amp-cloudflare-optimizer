@@ -1,12 +1,21 @@
+Test: basic.html (unminified)
+   Mean=1.64
+   StdDev=12.309768478732657
+Test: amp.dev.html (unminified)
+   Mean=19.6
+   StdDev=7.580237463298889
 Test: basic.html (minified)
-   Mean=0.67
-   StdDev=3.977574637891796
-Test: basic.html (unminifed)
-   Mean=1.37
-   StdDev=11.026926135600952
+   Mean=0.89
+   StdDev=5.360774197818824
 Test: amp.dev.html (minified)
-   Mean=126.37
-   StdDev=23.079278584912483
-Test: amp.dev.html (unminifed)
-   Mean=18.41
-   StdDev=7.398776925952019
+   Mean=129.92
+   StdDev=27.60314474837965
+Test: GO: amp.dev.html
+   Mean=30.72
+   StdDev=6.718749883720932
+Test: GO: basic.html
+   Mean=11.38
+   StdDev=0.7453858061433685
+Test: exec: echo
+   Mean=3.82
+   StdDev=1.6515447314559784
