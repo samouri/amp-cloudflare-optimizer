@@ -38,6 +38,33 @@ const minifiedOptimizer = AmpOptimizer.create({
   optimizeHeroImages: false,
 })
 
+const nopassOptimizer = AmpOptimizer.create({
+  minify: false,
+  fetch: () => () => {throw new Error('No fetching allowed')},
+  transformations: [],
+})
+
+const minimalPassOptimizer = AmpOptimizer.create({
+  minify: false,
+  fetch: () => { throw new Error('No fetching allowed')},
+  transformations: [
+    // Detect hero image and preload link rel=preload, needs to run after OptimizeImages
+    'OptimizeImages',
+    // Applies server-side-rendering optimizations
+    'ServerSideRendering',
+    // Removes the boilerplate
+    // needs to run after ServerSideRendering
+    'AmpBoilerplateTransformer',
+    // Optimizes script import order
+    // needs to run after ServerSideRendering
+    'ReorderHeadTransformer',
+    // needs to run after ReorderHeadTransformer
+    'RewriteAmpUrls',
+    'GoogleFontsPreconnect',
+    'AddTransformedFlag',
+  ],
+})
+
 const basicHtmlFilePath = path.join(__dirname, 'examples', 'basic.html')
 const basicHtml = fs.readFileSync(basicHtmlFilePath, 'utf8')
 const ampDevHtmlFilePath = path.join(__dirname, 'examples', 'amp.dev.html')
@@ -78,6 +105,14 @@ async function main() {
 
   await runTest('amp.dev.html (minified)', () =>
     minifiedOptimizer.transformHtml(ampDevHtml, { canonical: 'google.com' }),
+  )
+
+  await runTest('amp.dev.html (nopass)', () =>
+    nopassOptimizer.transformHtml(ampDevHtml, { canonical: 'google.com' }),
+  )
+
+  await runTest('amp.dev.html (minimal pass)', () =>
+    minimalPassOptimizer.transformHtml(ampDevHtml, { canonical: 'google.com' }),
   )
 
   await runTest('GO: amp.dev.html', () =>
