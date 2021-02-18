@@ -70,6 +70,8 @@ const basicHtml = fs.readFileSync(basicHtmlFilePath, 'utf8')
 const ampDevHtmlFilePath = path.join(__dirname, 'examples', 'amp.dev.html')
 const ampDevHtml = fs.readFileSync(ampDevHtmlFilePath, 'utf8')
 
+// Note: I've noticed that the JIT is incredibly important for good performance
+// 90ms on first run, ~3ms on 20th run.
 let runs = 100
 let output = ''
 async function runTest(name, fn) {
