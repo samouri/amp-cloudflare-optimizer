@@ -12,12 +12,10 @@ See it in action at https://amp-optimizer.friedj-google.workers.dev'
 wrangler generate my-worker  https://github.com/samouri/amp-cloudflare-optimizer
 ```
 
-2. Customize the configuration at `optimizer-config.js` to point to your domain name.
+2. Customize the configuration at `config.json` to point to your domain name.
 
-```js
-module.export = {
-  domain: 'YOUR_DOMAIN_NAME',
-}
+```json
+{ "domain": "YOUR_DOMAIN_NAME" }
 ```
 
 3. Publish!
@@ -28,7 +26,7 @@ wrangler publish
 
 ### Customizing the cache values
 
-You may customize the fetch cache used by the Cloudflare Worker by modifying the values in `optimizer-config.js`. See the [Cloudflare Docs](https://developers.cloudflare.com/workers/runtime-apis/request#requestinitcfproperties) for more details. We currenlty only support updating two values: `cacheEverything` and `ttl`.
+You may customize the fetch cache used by the Cloudflare Worker by modifying the values in `config.json`. See the [Cloudflare Docs](https://developers.cloudflare.com/workers/runtime-apis/request#requestinitcfproperties) for more details. We currenlty only support updating two values: `cacheEverything` and `ttl`.
 
 ```js
 module.export = {
