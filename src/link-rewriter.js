@@ -8,7 +8,7 @@ class LinkRewriter {
     /** @type {{from?: string, to: string}} */
     this.config = {
       from: config.from,
-      to: config.to ?? config.domain,
+      to: config.to || config.domain,
     }
   }
 
@@ -23,4 +23,6 @@ class LinkRewriter {
   }
 }
 
-export default new HTMLRewriter().on('a', new LinkRewriter())
+export default function getLinkRewriter(config) {
+  return new HTMLRewriter().on('a', new LinkRewriter(config));
+} 

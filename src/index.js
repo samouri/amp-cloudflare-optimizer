@@ -1,6 +1,6 @@
 const AmpOptimizer = require('@ampproject/toolbox-optimizer')
 const config = require('../config.json')
-const linkRewriter = require('./link-rewriter')
+const getLinkRewriter = require('./link-rewriter')
 
 // Ensure config is valid
 if (config.from || config.to) {
@@ -17,6 +17,7 @@ if (config.domain) {
     )
   }
 }
+console.log(JSON.stringify(config))
 
 /**
  * 1. minify:false is necessary to speed up the AmpOptimizer. terser also cannot be used since dynamic eval() is part of terser and banned by CloudflareWorkers.
@@ -34,11 +35,6 @@ const ampOptimizer = AmpOptimizer.create({
       },
     }),
 })
-
-/**
- * HrefRewriter for rewriting all links to point back to the reverse-proxy instead of the underlying
- * domain.
- */
 
 async function handleRequest(request) {
   const url = new URL(request.url)
@@ -66,11 +62,10 @@ async function handleRequest(request) {
     return clonedResponse
   }
 
-  console.log(`Optimizing: ${url.toString()}`)
   try {
     const transformed = await ampOptimizer.transformHtml(responseText)
     const r = new Response(transformed, { headers, statusText, status })
-    return linkRewriter.transform(r)
+    return getLinkRewriter(config).transform(r)
   } catch (err) {
     console.error(`Failed to optimize: ${url.toString()}, with Error; ${err}`)
     return clonedResponse
