@@ -1,6 +1,6 @@
-name = "amp-optimizer"
+name = "optimizer"
 type = "webpack"
-account_id = "3f6b87bddd5668df992c19d53e030d32"
+account_id = "d23423cc1d5bd44271dba1eeadd89fb7"
 workers_dev = true
 route = ""
 zone_id = ""

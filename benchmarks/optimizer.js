@@ -40,13 +40,17 @@ const minifiedOptimizer = AmpOptimizer.create({
 
 const nopassOptimizer = AmpOptimizer.create({
   minify: false,
-  fetch: () => () => {throw new Error('No fetching allowed')},
+  fetch: () => () => {
+    throw new Error('No fetching allowed')
+  },
   transformations: [],
 })
 
 const minimalPassOptimizer = AmpOptimizer.create({
   minify: false,
-  fetch: () => { throw new Error('No fetching allowed')},
+  fetch: () => {
+    throw new Error('No fetching allowed')
+  },
   transformations: [
     // Detect hero image and preload link rel=preload, needs to run after OptimizeImages
     'OptimizeImages',

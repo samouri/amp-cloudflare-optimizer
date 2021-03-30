@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,css,json,md}'"
+    "format": "prettier --write 'src/*.{js,css,json,md}'"
   },
   "author": "Jake Fried <samouri@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
-    "node-fetch": "^2.6.1",
-    "prettier": "^1.18.2"
+    "node-fetch": "2.6.1",
+    "prettier": "1.18.2"
   },
   "dependencies": {
     "@ampproject/toolbox-optimizer": "^2.7.4",
