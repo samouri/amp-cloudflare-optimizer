@@ -1,15 +1,15 @@
 # AMP Cloudflare Optimizer
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/samouri/amp-cloudflare-optimizer)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ampproject/cloudflare-optimizer)
 
-See it in action at https://amp-optimizer.friedj-google.workers.dev'
+See it in action at https://optimizer.ampdev.workers.dev/
 
 ## Usage
 
 1. Create your own Cloudflare Worker Repo using this as a template.
 
 ```bash
-wrangler generate my-worker  https://github.com/samouri/amp-cloudflare-optimizer
+npx wrangler generate my-worker  https://github.com/ampproject/cloudflare-optimizer
 ```
 
 2. Customize the configuration at `config.json` to point to your domain name.
@@ -21,29 +21,32 @@ wrangler generate my-worker  https://github.com/samouri/amp-cloudflare-optimizer
 3. Publish!
 
 ```bash
-wrangler publish
-```
-
-### Customizing the cache values
-
-You may customize the fetch cache used by the Cloudflare Worker by modifying the values in `config.json`. See the [Cloudflare Docs](https://developers.cloudflare.com/workers/runtime-apis/request#requestinitcfproperties) for more details. We currenlty only support updating two values: `cacheEverything` and `ttl`.
-
-```js
-module.export = {
-  cache: {
-    everything: true, // default: false
-    ttl: 3600, // default: 0
-  },
-}
+npx wrangler publish
 ```
 
 ### Usage as a reverse proxy
 
-**Note**: This is not recommended as compared to the route interceptor. In this mode, it may only fail-closed as opposed to [fail open](https://blog.cloudflare.com/dogfooding-edge-workers/).
+If your origin is not CF backed, then you can only use the cloudflare optimizer in reverse proxy mode. Instead of specifying `domain`, you must specify both `from` and `to` URLs.
 
 ```js
 module.export = {
-  from: 'YOUR_WORKER_DOMAIN', // Provide the domain name that your cloudflare worker is be deployed to.
-  to: 'YOUR_SERVER_IP', // Provide IP Address or Domain Name where requests should be proxied to.
+  from: 'YOUR_WORKER_DOMAIN', // Provide the domain name that your cloudflare worker is deployed.
+  to: 'YOUR_SERVER_IP', // Provide the URL of the origin to proxy to.
+}
+```
+
+### Enabling image optimization
+
+If you are a Business or Enterprise customer of Cloudflare, you may enable [Cloudflare Image Optimizations](https://developers.cloudflare.com/images/url-format). Just add `enableCloudflareImageOptimization: true` to the `config.json` file and images will automatically resized and optimized for multiple surfaces.
+
+### Passing configuration options to AMP Optimizer
+
+Under the hood, `amp-cloudflare-worker` utilizes the [AMP Optimizer](https://github.com/ampproject/amp-toolbox/tree/main/packages/optimizer#options) library. If you'd like to pass through configuration options to the underlying library, you may do so by adding it to the `optimizer` key within `config.json`. For example, to increase the hero image count from 2 to 5:
+
+```json
+{
+  "optimizer": {
+    "maxHeroImageCount": 5
+  }
 }
 ```
