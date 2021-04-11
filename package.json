@@ -1,22 +1,26 @@
 {
-  "name": "amp-cloudflare-optimizer",
+  "name": "@ampproject/cloudflare-amp-optimizer",
   "version": "0.1.0",
-  "description": "An Cloudflare Worker AMP Optimizer",
-  "main": "index.js",
+  "description": "A Cloudflare Worker AMP Optimizer",
+  "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write 'src/*.{js,css,json,md}'"
+    "beta": "wrangler publish --env=beta",
+    "coverage": "jest --coverage && open coverage/lcov-report/index.html",
+    "format": "prettier --write '{src,test}/*.{js,css,json,md}'",
+    "publish": "wrangler publish",
+    "start": "wrangler dev --env=dev",
+    "test": "jest"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*.js"
+    ]
   },
   "author": "Jake Fried <samouri@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
-    "node-fetch": "2.6.1",
+    "@ampproject/toolbox-optimizer": "2.8.0-canary.16",
+    "jest": "^26.6.3",
     "prettier": "1.18.2"
-  },
-  "dependencies": {
-    "@ampproject/toolbox-optimizer": "^2.7.4",
-    "acorn": "^8.0.4",
-    "jimp": "^0.16.1",
-    "probe-image-size": "^6.0.0"
   }
 }

@@ -1,5 +1,8 @@
 {
   "from": "optimizer.ampdev.workers.dev",
   "to": "amp.dev",
-  "cache": { "everything": true, "ttl": 3600 }
+  "optimizer": {
+    "maxHeroImageCount": 5
+  },
+  "enableKVCache": true
 }
