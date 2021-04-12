@@ -53,7 +53,7 @@ async function handleRequest(request, config = config, event) {
   }
 
   // Immediately return if not GET.
-  if (request.method !== 'GET') {
+  if (request.method !== 'GET' || config.mode === 'proxy') {
     request.url = url
     return fetch(request)
   }

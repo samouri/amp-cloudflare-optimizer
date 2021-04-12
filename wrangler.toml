@@ -1,4 +1,4 @@
-name = "optimizer"
+name = "perf-test"
 type = "webpack"
 account_id = "d23423cc1d5bd44271dba1eeadd89fb7"
 workers_dev = true
@@ -10,16 +10,16 @@ kv_namespaces = [
   { binding = "KV", id = "471b51eb82a14c4382577ca2b2f06113", preview_id="2aa2540e31a8499ebc6cb23bfcde6541"},
 ]
 
-[env.dev]
-name = "optimizer-dev"
-vars = { MODE = "dev" }
+[env.proxy]
+name = "justproxy"
+vars = { MODE = "proxy" }
 kv_namespaces = [
-  { binding = "KV", id = "a9b60f5037db4a4592e0b9208290384f", preview_id="a9b60f5037db4a4592e0b9208290384f"},
+  { binding = "KV", id = "2aa2540e31a8499ebc6cb23bfcde6541", preview_id="2aa2540e31a8499ebc6cb23bfcde6541"},
 ]
 
-[env.beta]
-name = "optimizer-beta"
-vars = { MODE = "beta" }
+[env.optimize]
+name = "justoptimize"
+vars = { MODE = "production" }
 kv_namespaces = [
   { binding = "KV", id = "2aa2540e31a8499ebc6cb23bfcde6541", preview_id="2aa2540e31a8499ebc6cb23bfcde6541"},
 ]
