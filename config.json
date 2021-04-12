@@ -1,6 +1,6 @@
 {
-  "from": "optimizer.ampdev.workers.dev",
-  "to": "amp.dev",
+  "from": "justoptimize.ampdev.workers.dev",
+  "to": "samouri.github.io/amp-cloudflare-optimizer",
   "optimizer": {
     "maxHeroImageCount": 5
   },
